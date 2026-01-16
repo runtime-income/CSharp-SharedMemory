@@ -1,43 +1,139 @@
-# C# Shared Memory Design: From Basics to Practical Use
+# CSharp-SharedMemory
 
-📌 This repository contains code examples and documents for the blog series:  
-**“C# 공유 메모리 구조 설계 (기초부터 실무까지)”**
+C#에서 **Shared Memory (MemoryMappedFile)** 를 사용해  
+프로세스 간 통신(IPC)을 구현하는 예제 프로젝트입니다.
 
----
-
-## 📑 Series Overview
-This series covers shared memory design in C# step by step, from fundamentals to real-world applications.
-
-1. Shared Memory Basics  
-2. IPC Comparison (Pipe, Socket, Shared Memory)  
-3. Getting Started with MemoryMappedFile  
-4. Struct-based Shared Memory Design  
-5. Single Data vs Array Data  
-6. Synchronization (Mutex, Semaphore)  
-7. Event-based Monitoring  
-8. Real-World Case: MES Integration  
-9. Advanced Usage & Cross-Language Interoperability  
-10. Maintenance & Expansion Strategies  
+이 레포는 티스토리 연재 시리즈  
+**「C# 공유 메모리 구조 설계 (기초부터 실무까지)」**의  
+**실습용 소스 코드 저장소**입니다.
 
 ---
 
-## 📝 Blog Series
-👉 Read the full articles on my blog:  
-🔗 [티스토리 블로그 – C# 공유 메모리 구조 설계 시리즈](https://runtime-income.tistory.com/6)
+## 📌 이 저장소의 목적
+
+- 공유 메모리를 **처음 접하는 개발자**가
+- “왜 이 구조가 나왔는지”를 이해하면서
+- **실무로 확장 가능한 최소 구조**를 만드는 것
+
+> ❌ 완성형 프레임워크  
+> ❌ 복붙용 만능 코드  
+>  
+> ✅ 단계별 학습 + 실무 기준 정리
 
 ---
 
-## 📂 Repository Structure
+## 🔢 프로젝트 버전 정보
+
+### 개발 환경
+- **IDE**: Visual Studio 2022 (v17.x)
+- **Framework**: .NET 6.0 (LTS)
+- **Language**: C#
+- **OS**: Windows 권장
+
+---
+
+## 📦 예제 단계 버전 (현재)
+
+### ✅ v1-int32
+
+현재 이 레포에 올라간 소스는 **v1-int32 단계**입니다.
+
+#### 포함 내용
+- `MemoryMappedFile` 기본 사용
+- 단일 데이터 (`int`) 공유
+- Writer / Reader 프로세스 분리
+- 동일한 이름의 공유 메모리 접근
+
+#### 의도적으로 포함하지 않은 것
+- ❌ 구조체
+- ❌ 배열 데이터
+- ❌ Mutex / Semaphore 동기화
+- ❌ 이벤트 기반 감시
+
+👉 **공유 메모리의 “감각을 잡는 단계”**
+
+---
+
+## 📁 프로젝트 구성
+
 ```
 CSharp-SharedMemory/
-├─ Part1/    # Shared Memory Basics
-├─ Part2/    # IPC Comparison
-├─ Part3/    # Getting Started with MemoryMappedFile
-├─ ...
-└─ Part10/   # Maintenance & Expansion
+ ├─ CSharp-SharedMemory.sln
+ ├─ README.md
+ ├─ .gitignore
+ └─ src/
+     ├─ SharedMemory.Core/
+     │   ├─ SharedMemoryConfig.cs
+     │   └─ Int32MmfAccessor.cs
+     ├─ SharedMemory.Writer/
+     │   └─ Program.cs
+     └─ SharedMemory.Reader/
+         └─ Program.cs
 ```
 
 ---
 
-## 📜 License
-This project is licensed under the [MIT License](LICENSE).
+## ▶ 실행 방법
+
+### Visual Studio
+1. `CSharp-SharedMemory.sln` 열기
+2. `SharedMemory.Writer` 실행
+3. `SharedMemory.Reader` 실행  
+→ Reader에서 값이 증가하면 성공
+
+### CLI
+```bash
+dotnet run --project .\src\SharedMemory.Writer
+dotnet run --project .\src\SharedMemory.Reader
+```
+
+---
+
+## ⚠️ 중요 참고 사항
+
+### Global\ 네임스페이스
+공유 메모리 이름에 `Global\` 을 사용하는 경우  
+환경/권한에 따라 실패할 수 있습니다.
+
+문제가 생기면 다음처럼 **로컬 이름부터 테스트**하세요.
+
+```csharp
+RuntimeIncome_SharedMem_V1
+```
+
+---
+
+## 🗺️ 향후 확장 로드맵
+
+| 단계 | 내용 |
+|---|---|
+| v1-int32 | 단일 int 공유 (현재) |
+| v2-struct | 고정 크기 구조체 공유 |
+| v3-array | 구조체 배열 설계 |
+| v4-sync | Mutex / Semaphore 동기화 |
+| v5-event | 변경 감지 (Event / Polling) |
+
+---
+
+## 📘 연재 시리즈 (티스토리)
+
+- 시리즈 안내  
+  https://runtime-income.tistory.com/6
+
+- [1] 공유 메모리란 무엇인가?  
+  https://runtime-income.tistory.com/12
+
+- [3] C#에서 공유 메모리 시작하기  
+  (이 레포의 v1-int32 예제 사용)
+
+---
+
+## 📌 정리
+
+공유 메모리는 빠르지만 위험합니다.  
+이 저장소는 그 위험을 **단계적으로 통제하는 방법**을 기록합니다.
+
+---
+
+## 📄 License
+MIT (필요 시 추가)
